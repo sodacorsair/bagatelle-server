@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bagatelle-server/models"
 	_ "bagatelle-server/routers"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
 )
 
 func main() {
+	models.InitDB()
 	// set filter to handle web CORS policy problem
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
 		AllowAllOrigins:  true,
