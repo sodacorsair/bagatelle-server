@@ -7,15 +7,6 @@ import (
 	"time"
 )
 
-type User struct {
-	Id         int       `xorm:"int(11) notnull autoincr"`
-	Username   string    `xorm:"varchar(50) notnull unique"`
-	Password   string    `xorm:"varchar(255) notnull"`
-	Permission int8      `xorm:"tinyint(4) default(0)"`
-	CreatedAt  time.Time `xorm:"created default(null)"`
-	UpdatedAt  time.Time `xorm:"updated default(null)"`
-}
-
 type Article struct {
 	Id        int       `xorm:"int(11) notnull autoincr"`
 	Title     string    `xorm:"notnull"`
@@ -46,32 +37,33 @@ type Comment struct {
 }
 
 var (
-	db *xorm.Engine
+	DB *xorm.Engine
 )
 
 func InitDB() {
-	db, err := xorm.NewEngine("mysql", "root:225500@tcp(127.0.0.1:3306)/bagatelle?charset=utf8")
+	var err error
+	DB, err = xorm.NewEngine("mysql", "root:225500@tcp(127.0.0.1:3306)/bagatelle?charset=utf8")
 	utils.ResponseError(err)
 
-	//createTables(db, User{}, Article{}, Comment{}, Category{}, Tag{})
-	if isExist, _ := db.IsTableExist(&User{}); !isExist {
-		err := db.CreateTables(&User{})
+	//createTables(DB, User{}, Article{}, Comment{}, Category{}, Tag{})
+	if isExist, _ := DB.IsTableExist(&User{}); !isExist {
+		err := DB.CreateTables(&User{})
 		utils.ResponseError(err)
 	}
-	if isExist, _ := db.IsTableExist(&Article{}); !isExist {
-		err := db.CreateTables(&Article{})
+	if isExist, _ := DB.IsTableExist(&Article{}); !isExist {
+		err := DB.CreateTables(&Article{})
 		utils.ResponseError(err)
 	}
-	if isExist, _ := db.IsTableExist(&Comment{}); !isExist {
-		err := db.CreateTables(&Comment{})
+	if isExist, _ := DB.IsTableExist(&Comment{}); !isExist {
+		err := DB.CreateTables(&Comment{})
 		utils.ResponseError(err)
 	}
-	if isExist, _ := db.IsTableExist(&Category{}); !isExist {
-		err := db.CreateTables(&Category{})
+	if isExist, _ := DB.IsTableExist(&Category{}); !isExist {
+		err := DB.CreateTables(&Category{})
 		utils.ResponseError(err)
 	}
-	if isExist, _ := db.IsTableExist(&Tag{}); !isExist {
-		err := db.CreateTables(&Tag{})
+	if isExist, _ := DB.IsTableExist(&Tag{}); !isExist {
+		err := DB.CreateTables(&Tag{})
 		utils.ResponseError(err)
 	}
 }
