@@ -16,4 +16,5 @@ func init() {
 	//beego.AddNamespace(ns)
 	beego.Router("awsl", &controllers.TestController{})
 	beego.Router("/register", &controllers.UserController{}, "post:Register")
+	beego.Router("/login", &controllers.UserController{}, "post:Login")
 }

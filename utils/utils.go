@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"fmt"
+	"golang.org/x/crypto/scrypt"
 	"log"
 	"reflect"
 )
@@ -20,4 +22,10 @@ func Struct2Map(obj interface{}) map[string]interface{} {
 		data[t.Field(i).Name] = v.Field(i).Interface()
 	}
 	return data
+}
+
+func CryptPwd(unique, pwd string) string {
+	salt := "@@$%" + unique + "!^&*#"
+	tmpByte, _ := scrypt.Key([]byte(pwd), []byte(salt), 16384, 8, 1, 32)
+	return fmt.Sprintf("%x", tmpByte)
 }

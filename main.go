@@ -4,7 +4,6 @@ import (
 	"bagatelle-server/models"
 	_ "bagatelle-server/routers"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/plugins/cors"
 )
 
@@ -18,6 +17,5 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Content-Type"},
 		AllowCredentials: true,
 	}))
-	logs.Debug("this is log")
 	beego.Run()
 }
