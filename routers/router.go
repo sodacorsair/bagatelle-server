@@ -17,4 +17,5 @@ func init() {
 	beego.Router("awsl", &controllers.TestController{})
 	beego.Router("/register", &controllers.UserController{}, "post:Register")
 	beego.Router("/login", &controllers.UserController{}, "post:Login")
+	beego.Router("/article/post", &controllers.ArticleController{}, "post:ArticlePost")
 }

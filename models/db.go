@@ -7,14 +7,6 @@ import (
 	"time"
 )
 
-type Article struct {
-	Id        int       `xorm:"int(11) notnull autoincr"`
-	Title     string    `xorm:"notnull"`
-	Content   string    `xorm:"text"`
-	CreatedAt time.Time `xorm:"created default(null)"`
-	UpdatedAt time.Time `xorm:"updated default(null)"`
-}
-
 type Category struct {
 	Id        int    `xorm:"int(11) notnull autoincr"`
 	Name      string `xorm:"varchar(100) notnull"`
