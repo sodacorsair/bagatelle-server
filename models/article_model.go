@@ -7,7 +7,7 @@ import (
 )
 
 type Article struct {
-	Id        int       `xorm:"int(11) notnull autoincr"`
+	Id        int       `xorm:"int(11) autoincr pk"`
 	Title     string    `xorm:"notnull" json:"submitTitle"`
 	Content   string    `xorm:"text" json:"submitContent"`
 	Top       bool      `json:"submitTop"`

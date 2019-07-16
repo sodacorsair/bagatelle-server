@@ -7,18 +7,6 @@ import (
 	"time"
 )
 
-type Category struct {
-	Id        int    `xorm:"int(11) notnull autoincr"`
-	Name      string `xorm:"varchar(100) notnull"`
-	ArticleId int    `xorm:"int(11) default(null)"`
-}
-
-type Tag struct {
-	Id        int    `xorm:"int(11) notnull autoincr"`
-	Name      string `xorm:"varchar(100) notnull"`
-	ArticleId int    `xorm:"int(11) default(null)"`
-}
-
 type Comment struct {
 	Id        int       `xorm:"int(11) notnull autoincr"`
 	UserId    int       `xorm:"int(11) default(null)"`
