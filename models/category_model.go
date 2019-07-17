@@ -21,3 +21,14 @@ func InsertCategory(category *Category) {
 		utils.ResponseError(errors.New("DB not existed"))
 	}
 }
+
+func FindCategories(cates *[]Category, sql string) {
+	if DB != nil {
+		err := DB.Table("category").Where(sql).Find(cates)
+		if err != nil {
+			utils.ResponseError(err)
+		}
+	} else {
+		utils.ResponseError(errors.New("DB not existed"))
+	}
+}

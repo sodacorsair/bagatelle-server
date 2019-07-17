@@ -3,7 +3,9 @@ package controllers
 import (
 	"bagatelle-server/models"
 	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego"
+	"strconv"
 )
 
 type ArticleController struct {
@@ -49,6 +51,37 @@ func (c *ArticleController) ArticlePost() {
 		res = map[string]interface{}{"code": 400, "message": "网络错误"}
 	}
 
+	c.Data["json"] = res
+	c.ServeJSON()
+}
+
+func (c *ArticleController) ArticleRetrieve() {
+	idStr := c.Ctx.Input.Param(":id")
+	articleId, _ := strconv.Atoi(idStr)
+	article := models.Article{Id: articleId}
+	models.FindArticle(&article)
+	tags := make([]models.Tag, 0)
+	models.FindTags(&tags, "article_id="+idStr)
+	for _, t := range tags {
+		fmt.Printf("%s\n", t.Name)
+	}
+	cates := make([]models.Category, 0)
+	models.FindCategories(&cates, "article_id="+idStr)
+	for _, c := range cates {
+		fmt.Printf("category: %s\n", c.Name)
+	}
+
+	res := map[string]interface{}{
+		"code":       200,
+		"title":      article.Title,
+		"content":    article.Content,
+		"isPrivate":  article.Private,
+		"tags":       tags,
+		"cates":      cates,
+		"postTime":   article.CreatedAt,
+		"updateTime": article.UpdatedAt,
+		"reads":      article.Reads,
+	}
 	c.Data["json"] = res
 	c.ServeJSON()
 }

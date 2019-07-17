@@ -21,3 +21,14 @@ func InsertTag(tag *Tag) {
 		utils.ResponseError(errors.New("DB not existed"))
 	}
 }
+
+func FindTags(tags *[]Tag, sql string) {
+	if DB != nil {
+		err := DB.Table("tag").Where(sql).Find(tags)
+		if err != nil {
+			utils.ResponseError(err)
+		}
+	} else {
+		utils.ResponseError(errors.New("DB not existed"))
+	}
+}
