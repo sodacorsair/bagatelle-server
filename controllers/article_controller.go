@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"bagatelle-server/models"
+	"bagatelle-server/utils"
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
@@ -71,6 +72,10 @@ func (c *ArticleController) ArticleRetrieve() {
 		fmt.Printf("category: %s\n", c.Name)
 	}
 
+
+    postTime := utils.TimeFormat(article.CreatedAt)
+    updateTime := utils.TimeFormat(article.UpdatedAt)
+
 	res := map[string]interface{}{
 		"code":       200,
 		"title":      article.Title,
@@ -78,8 +83,8 @@ func (c *ArticleController) ArticleRetrieve() {
 		"isPrivate":  article.Private,
 		"tags":       tags,
 		"cates":      cates,
-		"postTime":   article.CreatedAt,
-		"updateTime": article.UpdatedAt,
+		"postTime":   postTime,
+		"updateTime": updateTime,
 		"reads":      article.Reads,
 	}
 	c.Data["json"] = res

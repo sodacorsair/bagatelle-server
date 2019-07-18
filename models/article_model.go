@@ -2,7 +2,7 @@ package models
 
 import (
 	"bagatelle-server/utils"
-	"github.com/pkg/errors"
+	"errors"
 	"time"
 )
 

@@ -6,9 +6,9 @@ import (
 )
 
 type Tag struct {
-	Id        int    `xorm:"int(11) autoincr pk"`
-	Name      string `xorm:"varchar(100) notnull"`
-	ArticleId int    `xorm:"int(11) default(null)"`
+	Id        int    `xorm:"int(11) autoincr pk"	json:"id"`
+	Name      string `xorm:"varchar(100) notnull"	json:"name"`
+	ArticleId int    `xorm:"int(11) default(null)"	json:"article_id"`
 }
 
 func InsertTag(tag *Tag) {
