@@ -32,3 +32,13 @@ func FindTags(tags *[]Tag, sql string) {
 		utils.ResponseError(errors.New("DB not existed"))
 	}
 }
+
+func FindAllTags(tags *[]Tag) {
+	if DB != nil {
+		err := DB.Table("tag").Find(tags)
+		if err != nil {}
+		utils.ResponseError(err)
+	} else {
+		utils.ResponseError(errors.New("DB not existed"))
+	}
+}
