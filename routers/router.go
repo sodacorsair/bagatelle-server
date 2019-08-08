@@ -20,4 +20,5 @@ func init() {
 	beego.Router("/article/post", &controllers.ArticleController{}, "post:ArticlePost")
 	beego.Router("/article/get/?:id", &controllers.ArticleController{}, "get:ArticleRetrieve")
 	beego.Router("/tags/all", &controllers.TagController{}, "get:TagsRetrieve")
+	beego.Router("/tag/get", &controllers.TagController{}, "get:ArticlesRetrieveByTag")
 }
