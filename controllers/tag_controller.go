@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"bagatelle-server/models"
-	"encoding/json"
+	"fmt"
 	"github.com/astaxie/beego"
 )
 
@@ -23,29 +23,34 @@ func (c *TagController) TagsRetrieve() {
 }
 
 func (c *TagController) ArticlesRetrieveByTag() {
-	type Params struct {
-		name string
-		page int
-		pageSize int
+	name := c.GetString("name")
+
+	tags := make([]models.Tag, 0)
+	models.FindTags(&tags, "name='" + name + "'")
+
+	articles := make([]models.Article, len(tags))
+	for i := 0; i < len(tags); i++ {
+		articles[i].Id = tags[i].ArticleId
+		models.FindArticle(&(articles[i]))
 	}
-	var params Params
 
-	json.Unmarshal(c.Ctx.Input.RequestBody, &params)
+	type Item struct {
+		Name string	`json:"name"`
+		Id int	`json:"id"`
+	}
+	items := make([]Item, len(articles))
+	for i := 0; i < len(articles); i++ {
+		items[i].Name = articles[i].Title
+		items[i].Id = articles[i].Id
+	}
 
-	name := params.name
-
-	var tags *[]models.Tag
-	models.FindTags(tags, "name=" + name)
-
-	articles := make([]models.Article, len(*tags))
-	for i := 0; i < len(*tags); i++ {
-		articles[i].Id = (*tags)[i].ArticleId
-		models.FindArticle(&articles[i])
+	for _, item := range items {
+		fmt.Printf("%v\n", item)
 	}
 
 	res := map[string]interface{}{
 		"code": 200,
-		"articlelist": articles,
+		"articlelist": items,
 	}
 
 	c.Data["json"] = res
