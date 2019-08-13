@@ -90,3 +90,29 @@ func (c *ArticleController) ArticleRetrieve() {
 	c.Data["json"] = res
 	c.ServeJSON()
 }
+
+func (c *ArticleController) ArticlesRetrieve() {
+	type Item struct {
+		Id int `json:"id"`
+		Name string `json:"name"`
+		CreateAt string `json:"createdAt"`
+	}
+
+	articles := make([]models.Article, 0)
+	models.FindAllArticles(&articles)
+	articleList := make([]Item, len(articles))
+
+	for i := 0; i < len(articles); i++ {
+		articleList[i].Name = articles[i].Title
+		articleList[i].Id = articles[i].Id
+		articleList[i].CreateAt = utils.ShortTimeFormat(articles[i].CreatedAt)
+	}
+
+	res := map[string]interface{}{
+		"code": 200,
+		"articles": articleList,
+	}
+
+	c.Data["json"] = res
+	c.ServeJSON()
+}

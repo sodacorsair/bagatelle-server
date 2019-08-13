@@ -32,3 +32,13 @@ func FindCategories(cates *[]Category, sql string) {
 		utils.ResponseError(errors.New("DB not existed"))
 	}
 }
+
+func FindAllCategories(cates *[]Category) {
+	if DB != nil {
+		err := DB.Table("category").Find(cates)
+		if err != nil {}
+		utils.ResponseError(err)
+	} else {
+		utils.ResponseError(errors.New("DB not existed"))
+	}
+}

@@ -14,11 +14,13 @@ func init() {
 	//	),
 	//)
 	//beego.AddNamespace(ns)
-	beego.Router("awsl", &controllers.TestController{})
+	beego.Router("/articles/all", &controllers.ArticleController{}, "get:ArticlesRetrieve")
 	beego.Router("/register", &controllers.UserController{}, "post:Register")
 	beego.Router("/login", &controllers.UserController{}, "post:Login")
 	beego.Router("/article/post", &controllers.ArticleController{}, "post:ArticlePost")
 	beego.Router("/article/get/?:id", &controllers.ArticleController{}, "get:ArticleRetrieve")
 	beego.Router("/tags/all", &controllers.TagController{}, "get:TagsRetrieve")
 	beego.Router("/tag/get", &controllers.TagController{}, "get:ArticlesRetrieveByTag")
+	beego.Router("/categories/all", &controllers.CategoryController{}, "get:CatesRetrieve")
+	beego.Router("/category/get", &controllers.CategoryController{}, "get:ArticlesRetrieveByCate")
 }

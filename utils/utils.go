@@ -40,3 +40,16 @@ func TimeFormat(time time.Time) string {
     sub := re.FindSubmatch([]byte(timeStr))
     return string(sub[1])
 }
+
+func ShortTimeFormat(time time.Time) string {
+	timeStr := time.String()
+	re := regexp.MustCompile(`(?U)^(.*)\s`)
+	sub := re.FindAllString(timeStr, -1)
+	return sub[0]
+}
+
+func ReverseArray(arr []interface{}) {
+	for i := 0; i < len(arr); i++ {
+
+	}
+}

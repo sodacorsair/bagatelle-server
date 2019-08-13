@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"bagatelle-server/models"
-	"fmt"
+	"bagatelle-server/utils"
 	"github.com/astaxie/beego"
 )
 
@@ -37,20 +37,18 @@ func (c *TagController) ArticlesRetrieveByTag() {
 	type Item struct {
 		Name string	`json:"name"`
 		Id int	`json:"id"`
+		CreatedAt string `json:"createdAt"`
 	}
 	items := make([]Item, len(articles))
 	for i := 0; i < len(articles); i++ {
 		items[i].Name = articles[i].Title
 		items[i].Id = articles[i].Id
-	}
-
-	for _, item := range items {
-		fmt.Printf("%v\n", item)
+		items[i].CreatedAt = utils.ShortTimeFormat(articles[i].CreatedAt)
 	}
 
 	res := map[string]interface{}{
 		"code": 200,
-		"articlelist": items,
+		"articleItems": items,
 	}
 
 	c.Data["json"] = res

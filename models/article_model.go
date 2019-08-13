@@ -41,3 +41,13 @@ func FindArticle(article *Article) bool {
 	}
 	return false
 }
+
+func FindAllArticles(articles *[]Article) {
+	if DB != nil {
+		err := DB.Table("article").Find(articles)
+		if err != nil {}
+		utils.ResponseError(err)
+	} else {
+		utils.ResponseError(errors.New("DB not existed"))
+	}
+}
