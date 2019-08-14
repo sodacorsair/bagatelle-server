@@ -10,6 +10,24 @@ type TagController struct {
 	beego.Controller
 }
 
+type Item struct {
+	Name string	`json:"name"`
+	Id int	`json:"id"`
+	CreatedAt string `json:"createdAt"`
+}
+
+type ItemArr []Item
+
+func (arr ItemArr) Len() int {
+	return len(arr)
+}
+
+func (arr ItemArr) Swap(i, j int) {
+	temp := arr[i]
+	arr[i] = arr[j]
+	arr[j] = temp
+}
+
 func (c *TagController) TagsRetrieve() {
 	tags := make([]models.Tag, 0)
 	models.FindAllTags(&tags)
@@ -34,17 +52,15 @@ func (c *TagController) ArticlesRetrieveByTag() {
 		models.FindArticle(&(articles[i]))
 	}
 
-	type Item struct {
-		Name string	`json:"name"`
-		Id int	`json:"id"`
-		CreatedAt string `json:"createdAt"`
-	}
-	items := make([]Item, len(articles))
+	var items ItemArr
+	items = make([]Item, len(articles))
 	for i := 0; i < len(articles); i++ {
 		items[i].Name = articles[i].Title
 		items[i].Id = articles[i].Id
 		items[i].CreatedAt = utils.ShortTimeFormat(articles[i].CreatedAt)
 	}
+
+	utils.ReverseArray(items)
 
 	res := map[string]interface{}{
 		"code": 200,

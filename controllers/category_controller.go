@@ -22,6 +22,24 @@ func (c *CategoryController) CatesRetrieve() {
 	c.ServeJSON()
 }
 
+type CateItem struct {
+	Name string	`json:"name"`
+	Id int	`json:"id"`
+	CreatedAt string `json:"createdAt"`
+}
+
+type CateArr []CateItem
+
+func (arr CateArr) Len() int {
+	return len(arr)
+}
+
+func (arr CateArr) Swap(i, j int) {
+	temp := arr[i]
+	arr[i] = arr[j]
+	arr[j] = temp
+}
+
 func (c *CategoryController) ArticlesRetrieveByCate() {
 	name := c.GetString("name")
 
@@ -34,17 +52,15 @@ func (c *CategoryController) ArticlesRetrieveByCate() {
 		models.FindArticle(&(articles[i]))
 	}
 
-	type Item struct {
-		Name string	`json:"name"`
-		Id int	`json:"id"`
-		CreatedAt string `json:"createdAt"`
-	}
-	items := make([]Item, len(articles))
+	var items CateArr
+	items = make([]CateItem, len(articles))
 	for i := 0; i < len(articles); i++ {
 		items[i].Name = articles[i].Title
 		items[i].Id = articles[i].Id
 		items[i].CreatedAt = utils.ShortTimeFormat(articles[i].CreatedAt)
 	}
+
+	utils.ReverseArray(items)
 
 	res := map[string]interface{}{
 		"code": 200,
@@ -53,5 +69,4 @@ func (c *CategoryController) ArticlesRetrieveByCate() {
 
 	c.Data["json"] = res
 	c.ServeJSON()
-
 }

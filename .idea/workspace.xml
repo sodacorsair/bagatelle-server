@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e1ab340-f66a-4c06-b0d3-e6c1f4a7005a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/controllers/category_controller.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bagatelle-server.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bagatelle-server.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/article_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/article_controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/category_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/category_controller.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/tag_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/tag_controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/article_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/article_model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/category_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/category_model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/routers/router.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/utils.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/utils.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

@@ -91,22 +91,39 @@ func (c *ArticleController) ArticleRetrieve() {
 	c.ServeJSON()
 }
 
+type ArticleItem struct {
+	Id int `json:"id"`
+	Name string `json:"name"`
+	CreatedAt string `json:"createdAt"`
+}
+
+type ArticleArr []ArticleItem
+
+func (arr ArticleArr) Len() int {
+	return len(arr)
+}
+
+func (arr ArticleArr) Swap(i, j int) {
+	temp := arr[i]
+	arr[i] = arr[j]
+	arr[j] = temp
+}
+
 func (c *ArticleController) ArticlesRetrieve() {
-	type Item struct {
-		Id int `json:"id"`
-		Name string `json:"name"`
-		CreateAt string `json:"createdAt"`
-	}
+
 
 	articles := make([]models.Article, 0)
 	models.FindAllArticles(&articles)
-	articleList := make([]Item, len(articles))
+	var articleList ArticleArr
+	articleList = make([]ArticleItem, len(articles))
 
 	for i := 0; i < len(articles); i++ {
 		articleList[i].Name = articles[i].Title
 		articleList[i].Id = articles[i].Id
-		articleList[i].CreateAt = utils.ShortTimeFormat(articles[i].CreatedAt)
+		articleList[i].CreatedAt = utils.ShortTimeFormat(articles[i].CreatedAt)
 	}
+
+	utils.ReverseArray(articleList)
 
 	res := map[string]interface{}{
 		"code": 200,

@@ -10,6 +10,11 @@ import (
 	"time"
 )
 
+type Array interface {
+	Len() int
+	Swap(int, int)
+}
+
 func ResponseError(err error) {
 	if err != nil {
 		log.Fatal(err)
@@ -48,8 +53,9 @@ func ShortTimeFormat(time time.Time) string {
 	return sub[0]
 }
 
-func ReverseArray(arr []interface{}) {
-	for i := 0; i < len(arr); i++ {
-
+func ReverseArray(arr Array) {
+	length := arr.Len()
+	for i := 0; i < length / 2; i++ {
+		arr.Swap(i, length - 1 - i)
 	}
 }
