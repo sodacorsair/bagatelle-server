@@ -16,7 +16,7 @@ func (c *CategoryController) CatesRetrieve() {
 
 	res := map[string]interface{}{
 		"code": 200,
-		"catelist": cates,
+		"list": cates,
 	}
 	c.Data["json"] = res
 	c.ServeJSON()

@@ -56,6 +56,18 @@ func (c *ArticleController) ArticlePost() {
 	c.ServeJSON()
 }
 
+func (c *ArticleController) ArticleUpdate() {
+	type PostReceived struct {
+		Tags    []string `json:"submitTags"`
+		Cates   []string `json:"submitCates"`
+		Title   string   `json:"submitTitle"`
+		Content string   `json:"submitContent"`
+		Private bool     `json:"submitPrivate"`
+		Top     bool     `json:"submitTop"`
+		Id	int	`json:"submitId"`
+	}
+}
+
 func (c *ArticleController) ArticleRetrieve() {
 	idStr := c.Ctx.Input.Param(":id")
 	articleId, _ := strconv.Atoi(idStr)

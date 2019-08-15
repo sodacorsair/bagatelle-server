@@ -34,7 +34,7 @@ func (c *TagController) TagsRetrieve() {
 
 	res := map[string]interface{}{
 		"code": 200,
-		"taglist": tags,
+		"list": tags,
 	}
 	c.Data["json"] = res
 	c.ServeJSON()
