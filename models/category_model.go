@@ -3,6 +3,7 @@ package models
 import (
 	"bagatelle-server/utils"
 	"errors"
+	"strconv"
 )
 
 type Category struct {
@@ -30,6 +31,23 @@ func FindCategories(cates *[]Category, sql string) {
 		}
 	} else {
 		utils.ResponseError(errors.New("DB not existed"))
+	}
+}
+
+func UpdateCategories(article Article, updateCates []string) {
+	if DB != nil {
+		var cates []Category
+		FindCategories(&cates, "article_id=" + strconv.Itoa(article.Id))
+		for i := 0; i < len(cates); i++ {
+			DB.Id(cates[i].Id).Delete(cates[i])
+		}
+		for _, c := range updateCates {
+			cate := Category{
+				Name:      c,
+				ArticleId: article.Id,
+			}
+			InsertCategory(&cate)
+		}
 	}
 }
 

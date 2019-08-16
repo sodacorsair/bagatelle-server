@@ -5,8 +5,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bagatelle-server.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bagatelle-server.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controllers/article_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/article_controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/category_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/category_controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/tag_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/tag_controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/demo.go" beforeDir="false" afterPath="$PROJECT_DIR$/demo/demo.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/article_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/article_model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/category_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/category_model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/tag_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/tag_model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routers/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/routers/router.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -59,6 +61,32 @@
         </RuleState>
       </list>
     </option>
+  </component>
+  <component name="RunManager" selected="Go Build.go build demo.go">
+    <configuration name="go build bagatelle-server/demo" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="bagatelle-server" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/demo/demo.go" />
+      <package value="bagatelle-server/demo" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build demo.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="bagatelle-server" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/demo/demo.go" />
+      <package value="bagatelle-server" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build demo.go" />
+        <item itemvalue="Go Build.go build bagatelle-server/demo" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />

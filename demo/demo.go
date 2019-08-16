@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bagatelle-server/models"
 	"github.com/go-xorm/xorm"
-	"log"
 )
 
 func main() {
@@ -17,8 +15,10 @@ func main() {
 	//	_, err = models.DB.Insert(&user)
 	//}
 	//utils.ResponseError(err)
-	isExist, _ := db.Get(&models.User{Username: "admin"})
-	log.Println(isExist)
+
+	//sql := "select MAX(id) AS max_id from article"
+	//result, _ := db.Query(sql)
+	//log.Println(result)
 
 	//type Person struct {
 	//	Name string

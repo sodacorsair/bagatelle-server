@@ -3,6 +3,7 @@ package models
 import (
 	"bagatelle-server/utils"
 	"errors"
+	"strconv"
 )
 
 type Tag struct {
@@ -30,6 +31,23 @@ func FindTags(tags *[]Tag, sql string) {
 		}
 	} else {
 		utils.ResponseError(errors.New("DB not existed"))
+	}
+}
+
+func UpdateTags(article Article, updatedTags []string) {
+	if DB != nil {
+		var tags []Tag
+		FindTags(&tags, "article_id=" + strconv.Itoa(article.Id))
+		for i := 0; i < len(tags); i++ {
+			DB.Id(tags[i].Id).Delete(tags[i])
+		}
+		for _, t := range updatedTags {
+			tag := Tag{
+				Name:      t,
+				ArticleId: article.Id,
+			}
+			InsertTag(&tag)
+		}
 	}
 }
 

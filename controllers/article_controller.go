@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
+	"log"
 	"strconv"
 )
 
@@ -64,8 +65,31 @@ func (c *ArticleController) ArticleUpdate() {
 		Content string   `json:"submitContent"`
 		Private bool     `json:"submitPrivate"`
 		Top     bool     `json:"submitTop"`
-		Id	int	`json:"submitId"`
+		Id	string	`json:"submitId"`
 	}
+
+	var postReceived PostReceived
+	var res map[string]interface{}
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &postReceived); err == nil {
+		article := models.Article{
+			Title:   postReceived.Title,
+			Content: postReceived.Content,
+			Private: postReceived.Private,
+			Top:     postReceived.Top,
+		}
+		article.Id, _ = strconv.Atoi(postReceived.Id)
+		models.UpdateArticle(&article)
+		models.FindArticle(&article)
+		models.UpdateCategories(article, postReceived.Cates)
+		models.UpdateTags(article, postReceived.Tags)
+
+		res = map[string]interface{}{"code": 200, "articleid": article.Id}
+	} else {
+		res = map[string]interface{}{"code": 400, "message": "网络错误"}
+	}
+
+	c.Data["json"] = res
+	c.ServeJSON()
 }
 
 func (c *ArticleController) ArticleRetrieve() {
@@ -103,31 +127,32 @@ func (c *ArticleController) ArticleRetrieve() {
 	c.ServeJSON()
 }
 
-type ArticleItem struct {
-	Id int `json:"id"`
-	Name string `json:"name"`
-	CreatedAt string `json:"createdAt"`
-}
-
-type ArticleArr []ArticleItem
-
-func (arr ArticleArr) Len() int {
-	return len(arr)
-}
-
-func (arr ArticleArr) Swap(i, j int) {
-	temp := arr[i]
-	arr[i] = arr[j]
-	arr[j] = temp
-}
-
 func (c *ArticleController) ArticlesRetrieve() {
+	type ArticleItem struct {
+		Id int `json:"id"`
+		Name string `json:"name"`
+		CreatedAt string `json:"createdAt"`
+	}
 
+	page, _ := c.GetInt("page")
+	pageSize, _ := c.GetInt("pageSize")
+
+	maxId := models.GetMaxId()
+
+	groupNum := maxId / pageSize + 1
+
+	var startId int
+	endId := maxId - (page - 1) * pageSize
+	if page == groupNum {
+		startId = 1
+	} else {
+		startId = maxId - page * pageSize + 1
+	}
 
 	articles := make([]models.Article, 0)
-	models.FindAllArticles(&articles)
-	var articleList ArticleArr
-	articleList = make([]ArticleItem, len(articles))
+	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
+	log.Printf("%v\n", articles)
+	articleList := make([]ArticleItem, len(articles))
 
 	for i := 0; i < len(articles); i++ {
 		articleList[i].Name = articles[i].Title
@@ -135,11 +160,10 @@ func (c *ArticleController) ArticlesRetrieve() {
 		articleList[i].CreatedAt = utils.ShortTimeFormat(articles[i].CreatedAt)
 	}
 
-	utils.ReverseArray(articleList)
-
 	res := map[string]interface{}{
 		"code": 200,
 		"articles": articleList,
+		"total": maxId,
 	}
 
 	c.Data["json"] = res
