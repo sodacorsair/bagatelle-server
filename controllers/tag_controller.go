@@ -4,6 +4,7 @@ import (
 	"bagatelle-server/models"
 	"bagatelle-server/utils"
 	"github.com/astaxie/beego"
+	"log"
 )
 
 type TagController struct {
@@ -42,6 +43,8 @@ func (c *TagController) TagsRetrieve() {
 
 func (c *TagController) ArticlesRetrieveByTag() {
 	name := c.GetString("name")
+	page, _ := c.GetInt("page")
+	pageSize, _ := c.GetInt("pageSize")
 
 	tags := make([]models.Tag, 0)
 	models.FindTags(&tags, "name='" + name + "'")
@@ -50,6 +53,15 @@ func (c *TagController) ArticlesRetrieveByTag() {
 	for i := 0; i < len(tags); i++ {
 		articles[i].Id = tags[i].ArticleId
 		models.FindArticle(&(articles[i]))
+	}
+
+	groupNum := len(articles) / pageSize + 1
+	var startId, endId int
+	startId = (page - 1) * pageSize
+	if page == groupNum {
+		endId = len(articles)
+	} else {
+		endId = pageSize
 	}
 
 	var items ItemArr
@@ -61,6 +73,10 @@ func (c *TagController) ArticlesRetrieveByTag() {
 	}
 
 	utils.ReverseArray(items)
+
+	items = items[startId : endId]
+	log.Printf("%v\n%v\n", startId, endId)
+	log.Printf("%v\n", items)
 
 	res := map[string]interface{}{
 		"code": 200,

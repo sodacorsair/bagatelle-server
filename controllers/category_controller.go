@@ -42,6 +42,8 @@ func (arr CateArr) Swap(i, j int) {
 
 func (c *CategoryController) ArticlesRetrieveByCate() {
 	name := c.GetString("name")
+	page, _ := c.GetInt("page")
+	pageSize, _ := c.GetInt("pageSize")
 
 	cates := make([]models.Category, 0)
 	models.FindCategories(&cates, "name='" + name + "'")
@@ -61,6 +63,17 @@ func (c *CategoryController) ArticlesRetrieveByCate() {
 	}
 
 	utils.ReverseArray(items)
+
+	groupNum := len(articles) / pageSize + 1
+	var startId, endId int
+	startId = (page - 1) * pageSize
+	if page == groupNum {
+		endId = len(articles)
+	} else {
+		endId = pageSize
+	}
+
+	items = items[startId : endId]
 
 	res := map[string]interface{}{
 		"code": 200,

@@ -108,6 +108,8 @@ func (c *ArticleController) ArticleRetrieve() {
 		fmt.Printf("category: %s\n", c.Name)
 	}
 
+	article.Reads++
+	models.UpdateArticle(&article)
 
     postTime := utils.TimeFormat(article.CreatedAt)
     updateTime := utils.TimeFormat(article.UpdatedAt)
@@ -137,6 +139,52 @@ func (c *ArticleController) ArticlesRetrieve() {
 	page, _ := c.GetInt("page")
 	pageSize, _ := c.GetInt("pageSize")
 
+	maxId := models.GetMaxId() - 1
+
+	groupNum := maxId / pageSize + 1
+
+	var startId int
+	endId := maxId - (page - 1) * pageSize + 1
+	if page == groupNum {
+		startId = 2
+	} else {
+		startId = maxId + 1 - page * pageSize + 1
+	}
+
+	log.Printf("%v\n%v\n",  startId, endId)
+
+	articles := make([]models.Article, 0)
+	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
+	log.Printf("%v\n", articles)
+	articleList := make([]ArticleItem, len(articles))
+
+	for i := 0; i < len(articles); i++ {
+		articleList[i].Name = articles[i].Title
+		articleList[i].Id = articles[i].Id
+		articleList[i].CreatedAt = utils.ShortTimeFormat(articles[i].CreatedAt)
+	}
+
+	res := map[string]interface{}{
+		"code": 200,
+		"articles": articleList,
+		"total": maxId,
+	}
+
+	c.Data["json"] = res
+	c.ServeJSON()
+}
+
+func (c *ArticleController) ArticlesManage() {
+	type ArticleItem struct {
+		Id int `json:"id"`
+		Name string `json:"name"`
+		CreatedAt string `json:"createdAt"`
+		Reads int	`json:"reads"`
+	}
+
+	page, _ := c.GetInt("page")
+	pageSize, _ := c.GetInt("pageSize")
+
 	maxId := models.GetMaxId()
 
 	groupNum := maxId / pageSize + 1
@@ -149,6 +197,8 @@ func (c *ArticleController) ArticlesRetrieve() {
 		startId = maxId - page * pageSize + 1
 	}
 
+	log.Printf("%v\n%v\n",  startId, endId)
+
 	articles := make([]models.Article, 0)
 	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
 	log.Printf("%v\n", articles)
@@ -158,7 +208,10 @@ func (c *ArticleController) ArticlesRetrieve() {
 		articleList[i].Name = articles[i].Title
 		articleList[i].Id = articles[i].Id
 		articleList[i].CreatedAt = utils.ShortTimeFormat(articles[i].CreatedAt)
+		articleList[i].Reads = articles[i].Reads
 	}
+
+	log.Printf("%v\n", maxId)
 
 	res := map[string]interface{}{
 		"code": 200,
