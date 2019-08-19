@@ -23,6 +23,18 @@ func InsertCategory(category *Category) {
 	}
 }
 
+func DeleteCategories(article Article) {
+	if DB != nil {
+		var cates []Category
+		FindCategories(&cates, "article_id=" + strconv.Itoa(article.Id))
+		for _, cate := range cates {
+			DB.Id(cate.Id).Delete(cate)
+		}
+	} else {
+		utils.ResponseError(errors.New("DB not existed"))
+	}
+}
+
 func FindCategories(cates *[]Category, sql string) {
 	if DB != nil {
 		err := DB.Table("category").Where(sql).Find(cates)

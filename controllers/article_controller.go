@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
-	"log"
 	"strconv"
 )
 
@@ -92,6 +91,16 @@ func (c *ArticleController) ArticleUpdate() {
 	c.ServeJSON()
 }
 
+func (c *ArticleController) ArticleDelete() {
+	idStr := c.Ctx.Input.Param(":id")
+	articleId, _ := strconv.Atoi(idStr)
+	article := models.Article{Id: articleId}
+	models.FindArticle(&article)
+	models.DeleteCategories(article)
+	models.DeleteTags(article)
+	models.DeleteArticle(&article)
+}
+
 func (c *ArticleController) ArticleRetrieve() {
 	idStr := c.Ctx.Input.Param(":id")
 	articleId, _ := strconv.Atoi(idStr)
@@ -140,22 +149,18 @@ func (c *ArticleController) ArticlesRetrieve() {
 	pageSize, _ := c.GetInt("pageSize")
 
 	maxId := models.GetMaxId() - 1
-
-	groupNum := maxId / pageSize + 1
+	totalPages := (maxId + 1) / pageSize + 1
 
 	var startId int
 	endId := maxId - (page - 1) * pageSize + 1
-	if page == groupNum {
+	if page == totalPages {
 		startId = 2
 	} else {
 		startId = maxId + 1 - page * pageSize + 1
 	}
 
-	log.Printf("%v\n%v\n",  startId, endId)
-
 	articles := make([]models.Article, 0)
 	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
-	log.Printf("%v\n", articles)
 	articleList := make([]ArticleItem, len(articles))
 
 	for i := 0; i < len(articles); i++ {
@@ -187,21 +192,16 @@ func (c *ArticleController) ArticlesManage() {
 
 	maxId := models.GetMaxId()
 
-	groupNum := maxId / pageSize + 1
-
 	var startId int
 	endId := maxId - (page - 1) * pageSize
-	if page == groupNum {
+	if page == 1 {
 		startId = 1
 	} else {
 		startId = maxId - page * pageSize + 1
 	}
 
-	log.Printf("%v\n%v\n",  startId, endId)
-
 	articles := make([]models.Article, 0)
 	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
-	log.Printf("%v\n", articles)
 	articleList := make([]ArticleItem, len(articles))
 
 	for i := 0; i < len(articles); i++ {
@@ -211,7 +211,48 @@ func (c *ArticleController) ArticlesManage() {
 		articleList[i].Reads = articles[i].Reads
 	}
 
-	log.Printf("%v\n", maxId)
+	res := map[string]interface{}{
+		"code": 200,
+		"articles": articleList,
+		"total": maxId,
+	}
+
+	c.Data["json"] = res
+	c.ServeJSON()
+}
+
+func (c *ArticleController) ArticlesRecent() {
+	type ArticleItem struct {
+		Id int `json:"id"`
+		Name string `json:"name"`
+		CreatedAt string `json:"createdAt"`
+		Content string	`json:"content"`
+	}
+
+	maxId := models.GetMaxId()
+
+	pageSize := 5
+
+	groupNum := maxId / pageSize + 1
+
+	var startId int
+	endId := maxId
+	if 1 == groupNum {
+		startId = 2
+	} else {
+		startId = maxId - pageSize + 1
+	}
+
+	articles := make([]models.Article, 0)
+	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
+	articleList := make([]ArticleItem, len(articles))
+
+	for i := 0; i < len(articles); i++ {
+		articleList[i].Name = articles[i].Title
+		articleList[i].Id = articles[i].Id
+		articleList[i].CreatedAt = utils.ShortTimeFormat(articles[i].CreatedAt)
+		articleList[i].Content = articles[i].Content
+	}
 
 	res := map[string]interface{}{
 		"code": 200,

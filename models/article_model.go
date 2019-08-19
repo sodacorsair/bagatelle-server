@@ -37,6 +37,14 @@ func InsertArticle(article *Article) {
 	}
 }
 
+func DeleteArticle(article *Article) {
+	if DB != nil {
+		DB.Delete(article)
+	} else {
+		utils.ResponseError(errors.New("DB really not existed!"))
+	}
+}
+
 func UpdateArticle(article *Article) {
 	if DB != nil {
 		_, err := DB.Id(article.Id).Update(article)

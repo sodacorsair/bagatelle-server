@@ -51,6 +51,18 @@ func UpdateTags(article Article, updatedTags []string) {
 	}
 }
 
+func DeleteTags(article Article) {
+	if DB != nil {
+		var tags []Tag
+		FindTags(&tags, "article_id=" + strconv.Itoa(article.Id))
+		for _, tag := range tags {
+			DB.Id(tag.Id).Delete(tag)
+		}
+	} else {
+		utils.ResponseError(errors.New("DB not existed"))
+	}
+}
+
 func FindAllTags(tags *[]Tag) {
 	if DB != nil {
 		err := DB.Table("tag").Find(tags)

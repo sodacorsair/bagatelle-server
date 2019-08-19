@@ -20,9 +20,11 @@ func init() {
 	beego.Router("/article/post", &controllers.ArticleController{}, "post:ArticlePost")
 	beego.Router("/article/update", &controllers.ArticleController{}, "post:ArticleUpdate")
 	beego.Router("/article/get/?:id", &controllers.ArticleController{}, "get:ArticleRetrieve")
+	beego.Router("/article/delete/?:id", &controllers.ArticleController{}, "get:ArticleDelete")
 	beego.Router("/tags/all", &controllers.TagController{}, "get:TagsRetrieve")
 	beego.Router("/tag/get", &controllers.TagController{}, "get:ArticlesRetrieveByTag")
 	beego.Router("/categories/all", &controllers.CategoryController{}, "get:CatesRetrieve")
 	beego.Router("/category/get", &controllers.CategoryController{}, "get:ArticlesRetrieveByCate")
 	beego.Router("/articles/manage", &controllers.ArticleController{}, "get:ArticlesManage")
+	beego.Router("/articles/home", &controllers.ArticleController{}, "get:ArticlesRecent")
 }
