@@ -18,12 +18,12 @@ type Article struct {
 	UpdatedAt time.Time `xorm:"updated default(null)"`
 }
 
-func GetMaxId() int {
-	sql := "select MAX(id) AS max_id from article"
+func GetRows() int {
+	sql := "select count(*) from article"
 	result, _ := DB.Query(sql)
-	newStr := string(result[0]["max_id"])
-	maxId, _ := strconv.Atoi(newStr)
-	return maxId
+	newStr := string(result[0]["count(*)"])
+	rows, _ := strconv.Atoi(newStr)
+	return rows
 }
 
 func InsertArticle(article *Article) {
@@ -39,7 +39,7 @@ func InsertArticle(article *Article) {
 
 func DeleteArticle(article *Article) {
 	if DB != nil {
-		DB.Delete(article)
+		DB.Id(article.Id).Delete(article)
 	} else {
 		utils.ResponseError(errors.New("DB really not existed!"))
 	}
@@ -70,9 +70,12 @@ func FindArticle(article *Article) bool {
 	return false
 }
 
-func FindArticles(articles *[]Article, sql string) {
+func FindArticles(articles *[]Article, b, a int) {
 	if DB != nil {
-		err := DB.Table("article").Where(sql).Desc("id").Find(articles)
+		result, _ := DB.Query("select count(*) from article")
+		newStr := string(result[0]["count(*)"])
+		rows, _ := strconv.Atoi(newStr)
+		err := DB.Table("article").Limit(a - b + 1, rows - a).Desc("id").Find(articles)
 		if err != nil {
 			utils.ResponseError(err)
 		}

@@ -27,4 +27,5 @@ func init() {
 	beego.Router("/category/get", &controllers.CategoryController{}, "get:ArticlesRetrieveByCate")
 	beego.Router("/articles/manage", &controllers.ArticleController{}, "get:ArticlesManage")
 	beego.Router("/articles/home", &controllers.ArticleController{}, "get:ArticlesRecent")
+	beego.Router("/articles/about", &controllers.ArticleController{}, "get:ArticleFirst")
 }

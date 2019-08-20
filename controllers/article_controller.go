@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
+	"log"
 	"strconv"
 )
 
@@ -138,6 +139,23 @@ func (c *ArticleController) ArticleRetrieve() {
 	c.ServeJSON()
 }
 
+func (c *ArticleController) ArticleFirst() {
+	var articles []models.Article
+	models.FindArticles(&articles, 1, 1)
+	article := articles[0]
+
+	article.Reads++
+	models.UpdateArticle(&article)
+
+	res := map[string]interface{}{
+		"code":       200,
+		"title":      article.Title,
+		"content":    article.Content,
+	}
+	c.Data["json"] = res
+	c.ServeJSON()
+}
+
 func (c *ArticleController) ArticlesRetrieve() {
 	type ArticleItem struct {
 		Id int `json:"id"`
@@ -148,7 +166,7 @@ func (c *ArticleController) ArticlesRetrieve() {
 	page, _ := c.GetInt("page")
 	pageSize, _ := c.GetInt("pageSize")
 
-	maxId := models.GetMaxId() - 1
+	maxId := models.GetRows() - 1
 	totalPages := (maxId + 1) / pageSize + 1
 
 	var startId int
@@ -159,8 +177,10 @@ func (c *ArticleController) ArticlesRetrieve() {
 		startId = maxId + 1 - page * pageSize + 1
 	}
 
+	log.Printf("%v\n%v\n", startId, endId)
+
 	articles := make([]models.Article, 0)
-	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
+	models.FindArticles(&articles, startId, endId)
 	articleList := make([]ArticleItem, len(articles))
 
 	for i := 0; i < len(articles); i++ {
@@ -190,7 +210,7 @@ func (c *ArticleController) ArticlesManage() {
 	page, _ := c.GetInt("page")
 	pageSize, _ := c.GetInt("pageSize")
 
-	maxId := models.GetMaxId()
+	maxId := models.GetRows()
 
 	var startId int
 	endId := maxId - (page - 1) * pageSize
@@ -201,7 +221,7 @@ func (c *ArticleController) ArticlesManage() {
 	}
 
 	articles := make([]models.Article, 0)
-	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
+	models.FindArticles(&articles, startId, endId)
 	articleList := make([]ArticleItem, len(articles))
 
 	for i := 0; i < len(articles); i++ {
@@ -229,7 +249,7 @@ func (c *ArticleController) ArticlesRecent() {
 		Content string	`json:"content"`
 	}
 
-	maxId := models.GetMaxId()
+	maxId := models.GetRows()
 
 	pageSize := 5
 
@@ -244,7 +264,7 @@ func (c *ArticleController) ArticlesRecent() {
 	}
 
 	articles := make([]models.Article, 0)
-	models.FindArticles(&articles, "id between " + strconv.Itoa(startId) + " and " + strconv.Itoa(endId))
+	models.FindArticles(&articles, startId, endId)
 	articleList := make([]ArticleItem, len(articles))
 
 	for i := 0; i < len(articles); i++ {
