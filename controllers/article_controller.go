@@ -166,7 +166,7 @@ func (c *ArticleController) ArticlesRetrieve() {
 	page, _ := c.GetInt("page")
 	pageSize, _ := c.GetInt("pageSize")
 
-	maxId := models.GetRows() - 1
+	maxId := models.GetArticleRows() - 1
 	totalPages := (maxId + 1) / pageSize + 1
 
 	var startId int
@@ -210,7 +210,7 @@ func (c *ArticleController) ArticlesManage() {
 	page, _ := c.GetInt("page")
 	pageSize, _ := c.GetInt("pageSize")
 
-	maxId := models.GetRows()
+	maxId := models.GetArticleRows()
 
 	var startId int
 	endId := maxId - (page - 1) * pageSize
@@ -249,7 +249,7 @@ func (c *ArticleController) ArticlesRecent() {
 		Content string	`json:"content"`
 	}
 
-	maxId := models.GetRows()
+	maxId := models.GetArticleRows()
 
 	pageSize := 5
 

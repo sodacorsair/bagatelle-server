@@ -36,3 +36,7 @@ func FindUser(user *User) (bool, error) {
 	}
 	return false, fmt.Errorf("no database existed")
 }
+
+func GetUserRows() int {
+	return GetRows("user")
+}

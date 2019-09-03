@@ -4,6 +4,7 @@ import (
 	"bagatelle-server/utils"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
+	"strconv"
 	"time"
 )
 
@@ -60,4 +61,12 @@ func createTables(engine *xorm.Engine, tableNames ...interface{}) {
 	for _, tableName := range tableNames {
 		createTable(engine, tableName)
 	}
+}
+
+func GetRows(dbName string) int {
+	sql := "select count(*) from " + dbName
+	result, _ := DB.Query(sql)
+	newStr := string(result[0]["count(*)"])
+	rows, _ := strconv.Atoi(newStr)
+	return rows
 }

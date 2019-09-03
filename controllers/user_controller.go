@@ -34,7 +34,11 @@ func (c *UserController) Register() {
 
 			user.Password = utils.CryptPwd(user.Username, user.Password)
 
-			user.Permission = 1
+			if (models.GetUserRows() == 0) {
+				user.Permission = 0
+			} else {
+				user.Permission = 1
+			}
 
 			models.InsertUser(&user)
 
@@ -65,6 +69,7 @@ func (c *UserController) Login() {
 	} else if isExist, _ := models.FindUser(&models.User{Username: user.Username, Password: utils.CryptPwd(user.Username, user.Password)}); !isExist {
 		res = map[string]interface{}{"code": 400, "message": "密码不正确"}
 	} else {
+		user.Password = utils.CryptPwd(user.Username, user.Password)
 		models.FindUser(&user)
 		res = map[string]interface{}{"code": 200, "userid": user.Id, "username": user.Username, "permission": user.Permission}
 	}

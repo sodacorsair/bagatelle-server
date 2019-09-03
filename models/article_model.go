@@ -18,12 +18,8 @@ type Article struct {
 	UpdatedAt time.Time `xorm:"updated default(null)"`
 }
 
-func GetRows() int {
-	sql := "select count(*) from article"
-	result, _ := DB.Query(sql)
-	newStr := string(result[0]["count(*)"])
-	rows, _ := strconv.Atoi(newStr)
-	return rows
+func GetArticleRows() int {
+	return GetRows("article")
 }
 
 func InsertArticle(article *Article) {
